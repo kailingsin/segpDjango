@@ -20,7 +20,7 @@ def home(request):
     context = {
         'posts': posts
     }
-    return render(request, 'blog/home.html', context)
+    return render(request, 'funo2/DASHBOARD.html', context)
 
 
 def about(request):
