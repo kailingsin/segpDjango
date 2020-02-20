@@ -25,3 +25,7 @@ def home(request):
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
+
+
+def dashboard(request):
+    return render(request, 'blog/dashboard.html')
