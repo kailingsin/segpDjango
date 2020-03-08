@@ -5,66 +5,122 @@
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+                    $(document).ready(function(){
+                        var endpoint = 'model/'
+                        var defaultData = [];
+                        var labels = [];
+                        var data1=[];
+                        var data2=[];
+                        var i;
+                        $.ajax({
+                            method: "GET",
+                            url: endpoint,
+                            success: function(data){
+                                labels = data.labels.split(",")
+                                defaultData = data.default.split(",")
+                                for (i=0;i<labels.length-53;i++){
+                                    data1[i]=defaultData[i];
+                                    data2[i]=null;
 
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+                                }
+                                data2[labels.length-54]=defaultData[labels.length-54];
+                                for (i=labels.length-53;i<labels.length;i++){
+                                    data1[i]=null;
+                                    data2[i]=defaultData[i];
+                                }
+                                console.log(labels[labels.length-54])
+                                setChart()
+                            },
+                            error: function(error_data){
+                                console.log("error")
+                                console.log(error_data)
+                            }
+                        });
 
-    {% if title %}
-        <title>FUNO- {{ title }}</title>
-    {% else %}
-        <title>FUNO</title>
-    {% endif %}
+                        function setChart(){
+                            var ctx = document.getElementById("myChart");
+                            var ctx = document.getElementById("myChart");
+                            var ctx2 = document.getElementById("myChart2");
+                            var myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Price',
+                                    fill:false,
+                                    data: data1,
+                                    pointRadius:1,
+                                    backgroundColor: 'rgb(54,102,255)',
+                                    borderColor: 'rgb(54,102,255)',
+                                    borderWidth: 1,
+                                    pointHoverRadius:5
+                                },
+                                {
+                                    label: 'Forecast Price',
+                                    fill:false,
+                                    data: data2,
+                                    pointRadius:1,
+                                    backgroundColor: 'rgb(54,255,0)',
+                                    borderColor: 'rgb(54,255,0)',
+                                    borderWidth: 1,
+                                    pointHoverRadius:5
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero:true,
+                                            
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: 'Price (RM)'
+                                            }
+                                        }
+                                    }],
+                                    xAxes: [{
+                                        ticks: {
+                                            
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: 'Date'
+                                            }
+                                        }
+                                    }]
+                                },
+                               title:{
+                                   display:true,
+                                   text:"Poultry Field Price Forecast (1 Year)"
+                               },
+                                hover: {
+                                    mode: 'index'
+                                }
+
+                            }
+                        });
+
+
+                        }
+                    })
+                            
+                </script>
+  
+
 </head>
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">FUNO Crops</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-              <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
-            </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-              <a class="nav-item nav-link" href="#">Login</a>
-              <a class="nav-item nav-link" href="#">Register</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
-          {% block content %}{% endblock %}
-        </div>
-        <div class="col-md-4">
-          <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
-                <li class="list-group-item list-group-item-light">Announcements</li>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
-              </ul>
-            </p>
-          </div>
-        </div>
-      </div>
-    </main>
-
+            <p class='text-muted'>You can put any information here you'd like.</p>
+                <canvas id="myChart" style="display:block; height: 266px; width: 532px;" width="500" height="150"></canvas>
+                
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

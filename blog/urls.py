@@ -1,7 +1,11 @@
-from django.urls import path
+from django.conf.urls import url
+from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='blog-home'),
-    path('about/', views.about, name='blog-about'),
+    url(r'^$', views.Predict.as_view(), name='blog-home'),
+    # path('tem/', views.demo_linechart, name='blog-blog'),
+
+    # path('about/', views.about, name='blog-about'),
+    url(r'^model/$',views.data_Predict,name="model")
 ]
