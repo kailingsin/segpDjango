@@ -3,7 +3,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.Predict.as_view(), name='blog-home'),
+    url(r'^$', views.Predict, name='blog-home'),
     # path('tem/', views.demo_linechart, name='blog-blog'),
 
     # path('about/', views.about, name='blog-about'),

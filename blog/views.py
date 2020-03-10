@@ -31,9 +31,9 @@ def fill_missing(past_data):
                     past_data[row, col] = past_data[row - 1, col] + ((missing_next - past_data[row - 1, col]) / (i+1))
                     
 def data_Predict(request,*args,**kwargs):
-        # if request.method==POST:
-        past_data = pd.read_csv('PoultryData.csv')
-        regressor = load_model('lstm-chicken.h5')
+        my_thing = request.session.get('data', None)
+        past_data = pd.read_csv(my_thing['dataFile'])
+        regressor = load_model(my_thing['modelFile'])
         date=past_data['Date'].iloc[-150:]
         date=pd.to_datetime(date).tolist()
         date2=past_data["Date"].iloc[-1]
@@ -75,7 +75,26 @@ def data_Predict(request,*args,**kwargs):
         return JsonResponse(data)
     
 
-class Predict(View):
-    def get(self,request, *args, **kwargs):
-            return render(request,'blog/base.html')
+def Predict(request):
+        if request.method=='GET':
+            commodity=request.GET.get('commodity')
+            
+            if commodity=='vegetable':
+                print("Vega get")  
+                data={
+                    'dataFile':'PoultryData.csv',
+                    'modelFile':'lstm-chicken.h5'
+                    }
+                request.session['data']=data
+            
+            else:
+                print("chicken get")
+                data={
+                    'dataFile':'PoultryData.csv',
+                    'modelFile':'lstm-chicken.h5'
+                    }
+                request.session['data']=data
+               
+
+        return render(request,'blog/base.html')
     
