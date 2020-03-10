@@ -31,6 +31,7 @@ def fill_missing(past_data):
                     past_data[row, col] = past_data[row - 1, col] + ((missing_next - past_data[row - 1, col]) / (i+1))
                     
 def data_Predict(request,*args,**kwargs):
+        # if request.method==POST:
         past_data = pd.read_csv('PoultryData.csv')
         regressor = load_model('lstm-chicken.h5')
         date=past_data['Date'].iloc[-150:]

@@ -6,12 +6,14 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/loader.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+    
 
     <script>
                     $(document).ready(function(){
@@ -39,10 +41,14 @@
                                 }
                                 console.log(labels[labels.length-54])
                                 setChart()
+
                             },
                             error: function(error_data){
                                 console.log("error")
                                 console.log(error_data)
+                            },
+                            complete: function(){
+                                $('#loader').hide();
                             }
                         });
 
@@ -107,20 +113,35 @@
 
                             }
                         });
-
-
                         }
-                    })
-                            
+                    });  
                 </script>
-  
-
 </head>
 <body>
             <p class='text-muted'>You can put any information here you'd like.</p>
-                <canvas id="myChart" style="display:block; height: 266px; width: 532px;" width="500" height="150"></canvas>
+                    
+                    <div id='loader'>
+                        <div class="button">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <canvas id="myChart" style="display:block; height: 266px; width: 532px;" width="500" height="150"></canvas>
+                   
+
+            <select id="Commodity" method = "POST">
+                <option value="Poultry">Poultry</option>
+                <option value="Vegetable">Vegetable</option>
+                <option value="Tomato">Tomato</option>
+                <option value="audi">Audi</option>
+                <button>Show </button>
+            </select>
+
+
+            
                 
     <!-- Optional JavaScript -->
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 </body>
+
 </html>
